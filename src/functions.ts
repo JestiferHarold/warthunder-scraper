@@ -1,6 +1,7 @@
 import puppeteer, { Browser, Page } from "puppeteer";
+import { Country, Vehicle } from "./enums.js";
 
-async function connectToWiki(): Promise<Page> {
+async function connectToWiki(country: Country): Promise<{browser: Browser, page: Page}> {
     const browser: Browser = await puppeteer.launch(
         {
             headless: true,
@@ -11,15 +12,18 @@ async function connectToWiki(): Promise<Page> {
     const page: Page = await browser.newPage();
 
     await page.goto(
-        "https://wiki.warthunder.com/",
+        "https://wiki.warthunder.com/" + country,
         {
             waitUntil: "domcontentloaded"
         }
     );
 
-    return page;
+    return {
+        browser: browser,
+        page: page
+    };
 };
 
-export {
+export default {
     connectToWiki
 }
